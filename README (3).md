@@ -1,5 +1,7 @@
 # EX.NO.09        A project on Time series analysis on weather forecasting using ARIMA model 
-### Date: 
+### Date: 13/05/2025
+### Name:ASHOK KUMAR PREETHAM KUMAR
+### Reg No:212224040032
 
 ### AIM:
 To Create a project on Time series analysis on weather forecasting using ARIMA model in  Python and compare with other models.
@@ -16,7 +18,59 @@ To Create a project on Time series analysis on weather forecasting using ARIMA m
 7. Evaluate model predictions
 ### PROGRAM:
 
+### Import the neccessary packages
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_squared_error
+```
+
+### Load the dataset
+```
+data = pd.read_csv("AirPassengers.csv")
+```
+
+### Convert 'Month' column to datetime format
+```
+data['Month'] = pd.to_datetime(data['Month'])
+```
+
+### Set 'Month' column as index
+```
+data.set_index('Month', inplace=True)
+```
+
+### Arima Model
+```
+def arima_model(data, target_variable, order):
+    train_size = int(len(data) * 0.8)
+    train_data, test_data = data[:train_size], data[train_size:]
+    model = ARIMA(train_data[target_variable], order=order)
+    fitted_model = model.fit()
+    forecast = fitted_model.forecast(steps=len(test_data))
+    rmse = np.sqrt(mean_squared_error(test_data[target_variable], forecast))
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_data.index, train_data[target_variable], label='Training Data')
+    plt.plot(test_data.index, test_data[target_variable], label='Testing Data')
+    plt.plot(test_data.index, forecast, label='Forecasted Data')
+    plt.xlabel('Date')
+    plt.ylabel(target_variable)
+    plt.title('ARIMA Forecasting for ' + target_variable)
+    plt.legend()
+    plt.show()
+    print("Root Mean Squared Error (RMSE):", rmse)
+```
+### Arima Forecasting
+```
+arima_model(data, '#Passengers', order=(5,1,0))
+```
+
 ### OUTPUT:
+
+![image](https://github.com/user-attachments/assets/7ed93203-330f-4f4d-9d81-32fd17d16bb8)
+
 
 
 ### RESULT:
